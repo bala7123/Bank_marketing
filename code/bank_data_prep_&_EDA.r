@@ -216,3 +216,9 @@ anyNA(mice_bank)
 
 head(mice_bank)
 
+bank_all <- mice_bank
+
+# A very important observation is that there is a varaible called "Duration" that specifies the call duration with customer for a subscidary
+# As the call duration is going to be zero for new customers, using this model is not correct
+
+bankm <- bankm[ !names(bankm) %in% "duration"]

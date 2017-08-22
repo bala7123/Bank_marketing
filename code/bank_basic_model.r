@@ -1,59 +1,60 @@
+# Basic model
 
-source(bank_data_prep_&_EDA.r)
+bank_logistic <- glm(bank_train$y ~ age+job+contact+month+
+                   day_of_week +campaign +pdays +previous+ 
+                   cons.price.idx+cons.conf.idx+euribor3m, data = bank_train, 
+                 family = "binomial")   
 
-#With the actual data let us proceed with a simple logistic model and evaluate the results
+summary(bank_logistic)
 
-str(mice_bank)
+#AIC: 18386
 
-mice_bank$contact <- as.factor(mice_bank$contact)
-mice_bank$month <- as.factor(mice_bank$month)
-mice_bank$day_of_week <- as.factor(mice_bank$day_of_week)
-mice_bank$poutcome <- as.factor(mice_bank$poutcome)
- 
-str(mice_bank)
+# Hosmer Lemeshow
 
-mice_bank$y <- ifelse(mice_bank$y == "yes", 1, 0)
+library(ResourceSelection)
 
-table(mice_bank$y)
+hl <- hoslem.test(bank_logistic$y, fitted(bank_logistic), g = 10)
 
-# Creating Train and Test data
+hl
 
-set.seed(123)
-
-index <- sample(1:nrow(mice_bank), size = 0.8 * nrow(mice_bank))
-
-bank_train <- mice_bank[index,]
-
-dim(bank_train)
-
-bank_test <- mice_bank[-index,]
-
-dim(bank_test)
-
-table(bank_train$y)
-
-# 0     1 
-# 29215  3735
-
-table(bank_test$y)
-
-# 0    1 
-# 7333  905 
+table(bank_train$job)
+table(bank_test$job)
 
 
-############################## BASIC MODEL#################################
+#confusion matrix
 
+lr.pred <- predict(bank_logistic, bank_test, type = "response")
 
-basic_model <- glm(bank_train$y ~. , data = bank_train, family = "binomial")
+lr.pred <- round(lr.pred)
 
-summary(basic_model)
+install.packages("caret")
+library(caret)
 
-Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+library(SDMTools)
 
-(Dispersion parameter for binomial family taken to be 1)
+test_class_var <- ifelse(test.class.var == "yes",1,0)
 
-    Null deviance: 23294  on 32949  degrees of freedom
-Residual deviance: 13697  on 32905  degrees of freedom
-AIC: 13787
+# Yes - Deposit is subscribed, No - Deposit not subscribed
 
-Number of Fisher Scoring iterations: 11
+table(as.factor(test_class_var))
+
+names(bank_test)
+
+test.class.var <- bank_test[,20]
+
+table(test.class.var)
+
+bnk <- confusionMatrix(data = lr.pred, reference = test.class.var, positive = "1")
+
+bnk
+
+Confusion Matrix and Statistics
+
+          Reference
+Prediction    0    1
+         0 7256  680
+         1   90  212
+                                               
+               Accuracy : 0.9065     
+	    Sensitivity : 0.23767              
+            Specificity : 0.98775
