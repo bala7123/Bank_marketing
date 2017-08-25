@@ -1,5 +1,5 @@
 
-source(bank_data_prep_&_eda.r)
+source(bank_data_prep_eda.r)
 
 # While performing EDA, we noticed that there are highly correlated independant variables in this dataset.
 # Hence there is a chance for multicolinearity to exist. 

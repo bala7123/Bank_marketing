@@ -1,3 +1,6 @@
+
+source(bank_data_prep_eda.r)
+
 ################################# Dimensionality Reduction ##################################
 
 # Find correlated Feature

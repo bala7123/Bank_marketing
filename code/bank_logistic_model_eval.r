@@ -1,4 +1,8 @@
 
+source(bank_data_prep_eda.r)
+source(bank_feature_engineering.r)
+source(bank_logistic_models.r)
+
 # Let us look at the evaluation of the two logistic models
 
 
