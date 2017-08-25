@@ -9,7 +9,9 @@ library(recommenderlab)
 library(proxy)
 library(glmnet)
 library(foreach)
-
+library(ResourceSelection)
+library(caret)
+library(SDMTools)
 
 
 ## Data Loading
