@@ -12,6 +12,9 @@ library(foreach)
 library(ResourceSelection)
 library(caret)
 library(SDMTools)
+library(RColorBrewer)
+library(gmodels)
+library("e1071")
 
 
 ## Data Loading
