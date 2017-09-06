@@ -33,23 +33,9 @@ bnk_cm4
 # 0     3637 354
 # 1       50  78
 
-
+# The accuracy of SVM confusion matrix is 90.19%
 # The above confusion matrix results were not an improvement of the Logistic model as the prediction that i will be taking the subscidy 
 and actually i did not is 50 here and 46 in Logistic. 
-# hence we can train the model using Cross validation and validate the results
-
-# Training the svm model
-
-library(caret)
-library(kernlab)
-
-# i did not provide numbers in train control as the train data is around 32k and for the same reason repeats are kept 2.
-
-trctrl <- trainControl(method = "repeatedcv", repeats = 2)
-
-svm_train <- train(bank_train$y ~., data = bank_train[-c(1,2,6,7,11:13,15:16,20)],
-                   method = "svmRadial", trControl = trctrl)
-
 
 
 ## Decision Tree
@@ -82,6 +68,7 @@ CrossTable(bank_test$y, dc_pred, prop.chisq = FALSE, prop.r = FALSE, prop.c = FA
 #   Column Total |      3967 |       152 |      4119 | 
 # ---------------|-----------|-----------|-----------|
 
+# The accuracy of this matrix is 89.90%
 # An improvement in C5 over C4.5 tree is the adaptive boosting technique in Decision Tree
 # In this many trees are built and the trees vote on the best class
 
@@ -111,7 +98,7 @@ CrossTable(bank_test$y, bank_boost_pr, prop.chisq = FALSE, prop.r = FALSE,
 # ---------------|-----------|-----------|-----------|
 
 
-# It is clear that the boosting does not show proper improvement here.
+# It is clear that the boosting does not show proper improvement with an improved accuracy of 90.07%
 # Instead False Positive is 68 here whereas in the DTREE without boosting it is 61
 # One reason for this may be that the training data is noisy
 # So lets ignore boosting and take the actual DTREE model into consideration
